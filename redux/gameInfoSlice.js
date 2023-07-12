@@ -18,53 +18,81 @@ export const gameInfoSlice = createSlice({
     numOfChildren: 0,
     bankLoanPayment: 0,
     bankLoan: 0,
+    businesses: []
   },
   reducers: {
     setSalary: (state, action) => {
       state.salary = action.payload;
+      gameInfoSlice.caseReducers.setTotalIncome(state);
     },
     setPassiveIncome: (state, action) => {
       state.passiveIncome = action.payload;
     },
     setTotalIncome: (state, action) => {
-      state.totalIncome = action.payload;
+      state.totalIncome = state.salary + state.passiveIncome;
     },
     setTotalExpenses: (state, action) => {
-      state.totalExpenses = action.payload;
+      state.totalExpenses =
+        state.taxes +
+        state.homeMortgagePayment +
+        state.schoolLoanPayment +
+        state.carLoanPayment +
+        state.creditCardPayment +
+        state.otherExpenses +
+        state.perChildExpense * state.numOfChildren +
+        state.bankLoanPayment;
+      gameInfoSlice.caseReducers.setCashflow(state);
     },
     setCashflow: (state, action) => {
-      state.cashflow = action.payload;
+      state.cashflow = state.totalIncome - state.totalExpenses;
     },
     setTaxes: (state, action) => {
       state.taxes = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setHomeMortgagePayment: (state, action) => {
       state.homeMortgagePayment = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setSchoolLoanPayment: (state, action) => {
       state.schoolLoanPayment = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setCarLoanPayment: (state, action) => {
       state.carLoanPayment = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setCreditCardPayment: (state, action) => {
       state.creditCardPayment = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setOtherExpenses: (state, action) => {
       state.otherExpenses = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setPerChildExpense: (state, action) => {
       state.perChildExpense = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setNumOfChildren: (state, action) => {
-      state.numOfChildren = action.payload * state.perChildExpense;
+      state.numOfChildren = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setBankLoanPayment: (state, action) => {
-      state.bankLoanPayment = action.payload;
+      state.bankLoanPayment = state.bankLoan * 0.1;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setBankLoan: (state, action) => {
       state.bankLoan = action.payload;
+      gameInfoSlice.caseReducers.setBankLoanPayment(state);
     },
+    addBusiness: (state, action) => {
+      state.businesses.push(action.payload);
+    },
+    removeBusiness: (state, action) => {
+
+    }
+    //Add edit business details functions
   },
 });
 
@@ -85,6 +113,7 @@ export const {
   setNumOfChildren,
   setBankLoan,
   setBankLoanPayment,
+  businesses
 } = gameInfoSlice.actions;
 
 export default gameInfoSlice.reducer;

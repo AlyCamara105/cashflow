@@ -136,7 +136,7 @@ export default function Home() {
         </div>
         <div className="flex justify-between">
           <h1># of Children:</h1>
-          <CustomInput type="number" value={numOfChildren} setValueFunction={setNumOfChildren}/>
+          <CustomInput type="number" value={numOfChildren * perChildExpense} setValueFunction={setNumOfChildren}/>
         </div>
         <div className="flex justify-between">
           <h1>Bank Loan Payment:</h1>${bankLoanPayment}
