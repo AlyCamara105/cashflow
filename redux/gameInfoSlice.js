@@ -18,7 +18,17 @@ export const gameInfoSlice = createSlice({
     numOfChildren: 0,
     bankLoanPayment: 0,
     bankLoan: 0,
-    businesses: []
+    businesses: [],
+    stocks: [],
+    funds: [],
+    businessName: "",
+    businessCost: 0,
+    businessMortgage: 0,
+    businessDownPayment: 0,
+    businessCashflow: 0,
+    stockandfundsName: "",
+    stocksandfundsShares: 0,
+    stocksandfundsShareAmount: 0,
   },
   reducers: {
     setSalary: (state, action) => {
@@ -26,10 +36,22 @@ export const gameInfoSlice = createSlice({
       gameInfoSlice.caseReducers.setTotalIncome(state);
     },
     setPassiveIncome: (state, action) => {
-      state.passiveIncome = action.payload;
+      let businessPassiveIncome = state.businesses.reduce(
+        (passiveIncome, business) => passiveIncome + business.Cashflow,
+        0
+      );
+      let fundsPassiveIncome = state.funds.reduce(
+        (passiveIncome, fund) =>
+          passiveIncome + fund.NumberOfShares * fund.ShareAmount,
+        0
+      );
+
+      state.passiveIncome = businessPassiveIncome + fundsPassiveIncome;
+      gameInfoSlice.caseReducers.setTotalIncome(state);
     },
     setTotalIncome: (state, action) => {
       state.totalIncome = state.salary + state.passiveIncome;
+      gameInfoSlice.caseReducers.setCashflow(state);
     },
     setTotalExpenses: (state, action) => {
       state.totalExpenses =
@@ -87,12 +109,78 @@ export const gameInfoSlice = createSlice({
       gameInfoSlice.caseReducers.setBankLoanPayment(state);
     },
     addBusiness: (state, action) => {
-      state.businesses.push(action.payload);
+      let newBusiness = {};
+      newBusiness.Name = state.businessName;
+      newBusiness.Cost = state.businessCost;
+      newBusiness.Mortgage = state.businessMortgage;
+      newBusiness.DownPayment = state.businessDownPayment;
+      newBusiness.Cashflow = state.businessCashflow;
+
+      state.businesses.push(newBusiness);
+      gameInfoSlice.caseReducers.setPassiveIncome(state);
+    },
+    setBusinessName: (state, action) => {
+      state.businessName = action.payload;
+    },
+    setBusinessCost: (state, action) => {
+      state.businessCost = action.payload;
+    },
+    setBusinessMortgage: (state, action) => {
+      state.businessMortgage = action.payload;
+    },
+    setBusinessDownPayment: (state, action) => {
+      state.businessDownPayment = action.payload;
+    },
+    setBusinessCashflow: (state, action) => {
+      state.businessCashflow = action.payload;
+    },
+    setStocksandfundsName: (state, action) => {
+      state.stocksandfundsName = action.payload;
+    },
+    setStocksandfundsShares: (state, action) => {
+      state.stocksandfundsShares = action.payload;
+    },
+    setStocksandfundsShareAmount: (state, action) => {
+      state.stocksandfundsShareAmount = action.payload;
+    },
+    addStock: (state, action) => {
+      let newStock = {};
+      newStock.Name = state.stocksandfundsName;
+      newStock.NumberOfShares = state.stocksandfundsShares;
+      newStock.ShareAmount = state.stocksandfundsShareAmount;
+
+      state.stocks.push(newStock);
+    },
+    addFund: (state, action) => {
+      let newFund = {};
+      newFund.Name = state.stocksandfundsName;
+      newFund.NumberOfShares = state.stocksandfundsShares;
+      newFund.ShareAmount = state.stocksandfundsShareAmount;
+
+      state.funds.push(newFund);
+      gameInfoSlice.caseReducers.setPassiveIncome(state);
     },
     removeBusiness: (state, action) => {
+      state.businesses = state.businesses.filter(
+        (business) => business.Name != action.payload
+      );
 
-    }
-    //Add edit business details functions
+      console.log(state.businesses);
+
+      gameInfoSlice.caseReducers.setPassiveIncome(state);
+    },
+    removeStock: (state, action) => {
+      state.stocks = state.stocks.filter(
+        (stock) => stock.Name != action.payload
+      );
+
+      gameInfoSlice.caseReducers.setPassiveIncome(state);
+    },
+    removeFund: (state, action) => {
+      state.funds = state.funds.filter((fund) => fund.Name != action.payload);
+
+      gameInfoSlice.caseReducers.setPassiveIncome(state);
+    },
   },
 });
 
@@ -113,7 +201,21 @@ export const {
   setNumOfChildren,
   setBankLoan,
   setBankLoanPayment,
-  businesses
+  businesses,
+  addBusiness,
+  removeBusiness,
+  setBusinessName,
+  setBusinessCashflow,
+  setBusinessCost,
+  setBusinessMortgage,
+  setBusinessDownPayment,
+  setStocksandfundsName,
+  setStocksandfundsShareAmount,
+  setStocksandfundsShares,
+  addStock,
+  addFund,
+  removeFund,
+  removeStock,
 } = gameInfoSlice.actions;
 
 export default gameInfoSlice.reducer;

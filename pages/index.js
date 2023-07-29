@@ -1,8 +1,32 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
 import CustomInput from "@/components/CustomInput";
-import { useSelector } from "react-redux";
-import { setBankLoan, setCarLoanPayment, setCreditCardPayment, setHomeMortgagePayment, setNumOfChildren, setOtherExpenses, setPerChildExpense, setSalary, setSchoolLoanPayment, setTaxes } from "@/redux/gameInfoSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setBankLoan,
+  setCarLoanPayment,
+  setCreditCardPayment,
+  setHomeMortgagePayment,
+  setNumOfChildren,
+  setOtherExpenses,
+  setPerChildExpense,
+  setSalary,
+  setSchoolLoanPayment,
+  setTaxes,
+  setBusinessName,
+  setBusinessCost,
+  setBusinessMortgage,
+  setBusinessDownPayment,
+  setBusinessCashflow,
+  addBusiness,
+  setStocksandfundsName,
+  setStocksandfundsShareAmount,
+  setStocksandfundsShares,
+  addFund,
+  addStock,
+  removeBusiness,
+  removeFund,
+  removeStock,
+} from "@/redux/gameInfoSlice";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +56,34 @@ export default function Home() {
     (state) => state.gameInfo.bankLoanPayment
   );
   const bankLoan = useSelector((state) => state.gameInfo.bankLoan);
+  const businesses = useSelector((state) => state.gameInfo.businesses);
+  const funds = useSelector((state) => state.gameInfo.funds);
+  const stocks = useSelector((state) => state.gameInfo.stocks);
+  const dispatch = useDispatch();
+
+  function AddBusiness() {
+    dispatch(addBusiness());
+  }
+
+  function AddStock() {
+    dispatch(addStock());
+  }
+
+  function AddFund() {
+    dispatch(addFund());
+  }
+
+  function RemoveBusiness(businessName) {
+    dispatch(removeBusiness(businessName));
+  }
+
+  function RemoveStock(stockName) {
+    dispatch(removeStock(stockName));
+  }
+
+  function RemoveFund(fundName) {
+    dispatch(removeFund(fundName));
+  }
 
   return (
     <main>
@@ -93,11 +145,27 @@ export default function Home() {
         <div className="flex justify-between">
           <h1>Salary:</h1>${salary}
         </div>
-        <div className="flex underline">
+        <div className="underline">
           <h1>Interest/Dividends </h1>
         </div>
-        <div className="flex underline">
+        <div className="flex flex-col">
+          {funds.map((fund, index) => (
+            <div className="flex justify-between" key={index}>
+              <h1>{fund.Name}</h1>
+              <h1>${fund.NumberOfShares * fund.ShareAmount}</h1>
+            </div>
+          ))}
+        </div>
+        <div className="underline">
           <h1>Real Estate/Business</h1>
+        </div>
+        <div className="flex flex-col">
+          {businesses.map((business, index) => (
+            <div className="flex justify-between" key={index}>
+              <h1>{business.Name}</h1>
+              <h1>${business.Cashflow}</h1>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -108,35 +176,68 @@ export default function Home() {
         </div>
         <div className="flex justify-between">
           <h1>Taxes:</h1>
-          <CustomInput type="number" value={taxes} setValueFunction={setTaxes} />
+          <CustomInput
+            type="number"
+            value={taxes}
+            setValueFunction={setTaxes}
+          />
         </div>
         <div className="flex justify-between">
           <h1>Home Mortgage Payment:</h1>
-          <CustomInput type="number" value={homeMortgagePayment} setValueFunction={setHomeMortgagePayment} />
+          <CustomInput
+            type="number"
+            value={homeMortgagePayment}
+            setValueFunction={setHomeMortgagePayment}
+          />
         </div>
         <div className="flex justify-between">
           <h1>School Loan Payment:</h1>
-          <CustomInput type="number" value={schoolLoanPayment} setValueFunction={setSchoolLoanPayment} />
+          <CustomInput
+            type="number"
+            value={schoolLoanPayment}
+            setValueFunction={setSchoolLoanPayment}
+          />
         </div>
         <div className="flex justify-between">
           <h1>Car Loan Payment:</h1>
-          <CustomInput type="number" value={carLoanPayment} setValueFunction={setCarLoanPayment} />
+          <CustomInput
+            type="number"
+            value={carLoanPayment}
+            setValueFunction={setCarLoanPayment}
+          />
         </div>
         <div className="flex justify-between">
           <h1>Credit Card Payment:</h1>
-          <CustomInput type="number" value={creditCardPayment} setValueFunction={setCreditCardPayment} />
+          <CustomInput
+            type="number"
+            value={creditCardPayment}
+            setValueFunction={setCreditCardPayment}
+          />
         </div>
         <div className="flex justify-between">
           <h1>Other Expenses:</h1>
-          <CustomInput type="number" value={otherExpenses} setValueFunction={setOtherExpenses}/>
+          <CustomInput
+            type="number"
+            value={otherExpenses}
+            setValueFunction={setOtherExpenses}
+          />
         </div>
         <div className="flex justify-between">
           <h1>Per Child Expense:</h1>
-          <CustomInput type="number" value={perChildExpense} setValueFunction={setPerChildExpense}/>
+          <CustomInput
+            type="number"
+            value={perChildExpense}
+            setValueFunction={setPerChildExpense}
+          />
         </div>
         <div className="flex justify-between">
           <h1># of Children:</h1>
-          <CustomInput type="number" value={numOfChildren * perChildExpense} setValueFunction={setNumOfChildren}/>
+          <CustomInput
+            type="number"
+            value={numOfChildren * perChildExpense}
+            setValueFunction={setNumOfChildren}
+            form={true}
+          />
         </div>
         <div className="flex justify-between">
           <h1>Bank Loan Payment:</h1>${bankLoanPayment}
@@ -147,10 +248,6 @@ export default function Home() {
       <div className="space-y-1 border border-gray-500 p-5">
         <div className="mb-5 text-center">
           <h1 className="font-extrabold">Assets</h1>
-        </div>
-        <div className="!mb-5 flex justify-between">
-          <h1>Savings:</h1>
-          <CustomInput type="number" noDescription={true} />
         </div>
         <div className="flex justify-between text-[10px] underline">
           <div className="w-1/3 text-center">
@@ -163,6 +260,44 @@ export default function Home() {
             <h1>Cost/Share/Amount:</h1>
           </div>
         </div>
+        {stocks.map((stock, index) => (
+          <div className="flex items-center justify-between text-[10px]" key={index}>
+            <div className="w-1/3 text-center">
+              <h1>{stock.Name}</h1>
+            </div>
+            <div className="w-1/3 text-center">
+              <h1>{stock.NumberOfShares}</h1>
+            </div>
+            <div className="w-1/3 text-center">
+              <h1>${stock.ShareAmount}</h1>
+            </div>
+            <button
+              className="text-lg text-red-700"
+              onClick={() => RemoveStock(stock.Name)}
+            >
+              X
+            </button>
+          </div>
+        ))}
+        {funds.map((fund, index) => (
+          <div className="flex items-center justify-between text-[10px]" key={index}>
+            <div className="w-1/3 text-center">
+              <h1>{fund.Name}</h1>
+            </div>
+            <div className="w-1/3 text-center">
+              <h1>{fund.NumberOfShares}</h1>
+            </div>
+            <div className="w-1/3 text-center">
+              <h1>${fund.ShareAmount}</h1>
+            </div>
+            <button
+              className="text-lg text-red-700"
+              onClick={() => RemoveFund(fund.Name)}
+            >
+              X
+            </button>
+          </div>
+        ))}
         <div className="flex justify-between text-[10px] underline">
           <div className="w-1/3 text-center">
             <h1>Real Estate/Business:</h1>
@@ -174,6 +309,25 @@ export default function Home() {
             <h1>Cost:</h1>
           </div>
         </div>
+        {businesses.map((business, index) => (
+          <div className="flex items-center justify-between text-[10px]" key={index}>
+            <div className="w-1/3 text-center">
+              <h1>{business.Name}</h1>
+            </div>
+            <div className="w-1/3 text-center">
+              <h1>{business.DownPayment}</h1>
+            </div>
+            <div className="w-1/3 text-center">
+              <h1>${business.Cost}</h1>
+            </div>
+            <button
+              className="text-lg text-red-700"
+              onClick={() => RemoveBusiness(business.Name)}
+            >
+              X
+            </button>
+          </div>
+        ))}
       </div>
 
       {/* Liabilities Info  */}
@@ -199,12 +353,22 @@ export default function Home() {
         </div>
         <div className="flex justify-between">
           <h1>Bank Loan:</h1>
-          <CustomInput type="number" value={bankLoan} setValueFunction={setBankLoan} />
+          <CustomInput
+            type="number"
+            value={bankLoan}
+            setValueFunction={setBankLoan}
+          />
         </div>
         <div className="!mt-5 flex justify-between underline">
           <h1>Real Estate/Business</h1>
           <h1>Mortgage/Liability</h1>
         </div>
+        {businesses.map((business, index) => (
+          <div className="!mt-5 flex justify-between" key={index}>
+            <h1>{business.Name}</h1>
+            <h1>${business.Mortgage}</h1>
+          </div>
+        ))}
       </div>
 
       {/*  Buttons  */}
@@ -215,45 +379,88 @@ export default function Home() {
         <div className="flex flex-col space-y-1">
           <div className="flex justify-between">
             <h1>Name:</h1>
-            <CustomInput type="text" noDescription={true} />
+            <CustomInput
+              type="text"
+              noDescription={true}
+              form={true}
+              setValueFunction={setBusinessName}
+            />
           </div>
           <div className="flex justify-between">
             <h1>Cost:</h1>
-            <CustomInput type="number" noDescription={true} />
+            <CustomInput
+              type="number"
+              noDescription={true}
+              form={true}
+              setValueFunction={setBusinessCost}
+            />
           </div>
           <div className="flex justify-between">
             <h1>Mortgage:</h1>
-            <CustomInput type="number" noDescription={true} />
+            <CustomInput
+              type="number"
+              noDescription={true}
+              form={true}
+              setValueFunction={setBusinessMortgage}
+            />
           </div>
           <div className="flex justify-between">
             <h1>Down Payment:</h1>
-            <CustomInput type="text" noDescription={true} />
+            <CustomInput
+              type="text"
+              noDescription={true}
+              form={true}
+              setValueFunction={setBusinessDownPayment}
+            />
           </div>
           <div className="flex justify-between">
             <h1>Cashflow:</h1>
-            <CustomInput type="number" noDescription={true} />
+            <CustomInput
+              type="number"
+              noDescription={true}
+              form={true}
+              setValueFunction={setBusinessCashflow}
+            />
           </div>
-          <button className="rounded-lg border border-black">
+          <button
+            className="rounded-lg border border-black"
+            onClick={AddBusiness}
+          >
             Add Real Estate/Business
           </button>
         </div>
         <div className="!mt-5 flex flex-col space-y-1">
           <div className="flex justify-between">
             <h1>Name:</h1>
-            <CustomInput type="text" noDescription={true} />
+            <CustomInput
+              type="text"
+              noDescription={true}
+              form={true}
+              setValueFunction={setStocksandfundsName}
+            />
           </div>
           <div className="flex justify-between">
             <h1># of Shares:</h1>
-            <CustomInput type="number" noDescription={true} />
+            <CustomInput
+              type="number"
+              noDescription={true}
+              form={true}
+              setValueFunction={setStocksandfundsShares}
+            />
           </div>
           <div className="flex justify-between">
             <h1>Cost/Share/Amount:</h1>
-            <CustomInput type="number" noDescription={true} />
+            <CustomInput
+              type="number"
+              noDescription={true}
+              form={true}
+              setValueFunction={setStocksandfundsShareAmount}
+            />
           </div>
-          <button className="rounded-lg border border-black">
+          <button className="rounded-lg border border-black" onClick={AddStock}>
             Add Stocks/Etc
           </button>
-          <button className="rounded-lg border border-black">
+          <button className="rounded-lg border border-black" onClick={AddFund}>
             Add Funds/CDs
           </button>
         </div>
