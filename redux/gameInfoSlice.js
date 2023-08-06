@@ -13,6 +13,7 @@ export const gameInfoSlice = createSlice({
     schoolLoanPayment: 0,
     carLoanPayment: 0,
     creditCardPayment: 0,
+    retailPayment: 0,
     otherExpenses: 0,
     perChildExpense: 0,
     numOfChildren: 0,
@@ -60,6 +61,7 @@ export const gameInfoSlice = createSlice({
         state.schoolLoanPayment +
         state.carLoanPayment +
         state.creditCardPayment +
+        state.retailPayment +
         state.otherExpenses +
         state.perChildExpense * state.numOfChildren +
         state.bankLoanPayment;
@@ -86,6 +88,10 @@ export const gameInfoSlice = createSlice({
     },
     setCreditCardPayment: (state, action) => {
       state.creditCardPayment = action.payload;
+      gameInfoSlice.caseReducers.setTotalExpenses(state);
+    },
+    setRetailPayment: (state, action) => {
+      state.retailPayment = action.payload;
       gameInfoSlice.caseReducers.setTotalExpenses(state);
     },
     setOtherExpenses: (state, action) => {
@@ -196,6 +202,7 @@ export const {
   setSchoolLoanPayment,
   setCarLoanPayment,
   setCreditCardPayment,
+  setRetailPayment,
   setOtherExpenses,
   setPerChildExpense,
   setNumOfChildren,

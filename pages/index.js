@@ -5,6 +5,7 @@ import {
   setBankLoan,
   setCarLoanPayment,
   setCreditCardPayment,
+  setRetailPayment,
   setHomeMortgagePayment,
   setNumOfChildren,
   setOtherExpenses,
@@ -47,6 +48,7 @@ export default function Home() {
   const creditCardPayment = useSelector(
     (state) => state.gameInfo.creditCardPayment
   );
+  const retailPayment = useSelector((state) => state.gameInfo.retailPayment);
   const otherExpenses = useSelector((state) => state.gameInfo.otherExpenses);
   const perChildExpense = useSelector(
     (state) => state.gameInfo.perChildExpense
@@ -215,6 +217,14 @@ export default function Home() {
           />
         </div>
         <div className="flex justify-between">
+          <h1>Retail Payment:</h1>
+          <CustomInput
+            type="number"
+            value={retailPayment}
+            setValueFunction={setRetailPayment}
+          />
+        </div>
+        <div className="flex justify-between">
           <h1>Other Expenses:</h1>
           <CustomInput
             type="number"
@@ -261,7 +271,10 @@ export default function Home() {
           </div>
         </div>
         {stocks.map((stock, index) => (
-          <div className="flex items-center justify-between text-[10px]" key={index}>
+          <div
+            className="flex items-center justify-between text-[10px]"
+            key={index}
+          >
             <div className="w-1/3 text-center">
               <h1>{stock.Name}</h1>
             </div>
@@ -280,7 +293,10 @@ export default function Home() {
           </div>
         ))}
         {funds.map((fund, index) => (
-          <div className="flex items-center justify-between text-[10px]" key={index}>
+          <div
+            className="flex items-center justify-between text-[10px]"
+            key={index}
+          >
             <div className="w-1/3 text-center">
               <h1>{fund.Name}</h1>
             </div>
@@ -310,7 +326,10 @@ export default function Home() {
           </div>
         </div>
         {businesses.map((business, index) => (
-          <div className="flex items-center justify-between text-[10px]" key={index}>
+          <div
+            className="flex items-center justify-between text-[10px]"
+            key={index}
+          >
             <div className="w-1/3 text-center">
               <h1>{business.Name}</h1>
             </div>
