@@ -14,6 +14,10 @@ function CustomInput({
     if (!noDescription || form) {
       let targetValue = event.target.value;
 
+      if (targetValue == 0) {
+        return;
+      }
+
       if (type === "number") {
         targetValue = Number(targetValue);
       }
@@ -27,7 +31,7 @@ function CustomInput({
 
   function onKeyDown(event) {
     if (event.key === "Enter") {
-      onFocusLost(event)
+      onFocusLost(event);
     }
   }
 

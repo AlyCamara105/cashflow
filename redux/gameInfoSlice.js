@@ -30,6 +30,9 @@ export const gameInfoSlice = createSlice({
     stockandfundsName: "",
     stocksandfundsShares: 0,
     stocksandfundsShareAmount: 0,
+    carLoan: 0,
+    creditCardDebt: 0,
+    retailDebt: 0,
   },
   reducers: {
     setSalary: (state, action) => {
@@ -186,9 +189,51 @@ export const gameInfoSlice = createSlice({
       gameInfoSlice.caseReducers.setPassiveIncome(state);
     },
     removeFund: (state, action) => {
-      state.funds = state.funds.filter((fund) => fund.TimeCreated != action.payload);
+      state.funds = state.funds.filter(
+        (fund) => fund.TimeCreated != action.payload
+      );
 
       gameInfoSlice.caseReducers.setPassiveIncome(state);
+    },
+    goBankcrupt: (state, action) => {
+      let calculateHalf = (num) => {
+        let calc = num / 2;
+
+        if (calc < 10) {
+          calc = 10;
+        }
+
+        return Math.ceil(calc / 10) * 10;
+      };
+
+      gameInfoSlice.caseReducers.setCarLoanPayment(state, {
+        payload: calculateHalf(state.carLoanPayment),
+      });
+      gameInfoSlice.caseReducers.setCreditCardPayment(state, {
+        payload: calculateHalf(state.creditCardPayment),
+      });
+      gameInfoSlice.caseReducers.setRetailPayment(state, {
+        payload: calculateHalf(state.retailPayment),
+      });
+
+      gameInfoSlice.caseReducers.setCarLoan(state, {
+        payload: calculateHalf(state.carLoan),
+      });
+      gameInfoSlice.caseReducers.setCreditCardDebt(state, {
+        payload: calculateHalf(state.creditCardDebt),
+      });
+      gameInfoSlice.caseReducers.setRetailDebt(state, {
+        payload: calculateHalf(state.retailDebt),
+      });
+    },
+    setCarLoan: (state, action) => {
+      state.carLoan = action.payload;
+    },
+    setCreditCardDebt: (state, action) => {
+      state.creditCardDebt = action.payload;
+    },
+    setRetailDebt: (state, action) => {
+      state.retailDebt = action.payload;
     },
   },
 });
@@ -226,6 +271,10 @@ export const {
   addFund,
   removeFund,
   removeStock,
+  goBankcrupt,
+  setCarLoan,
+  setCreditCardDebt,
+  setRetailDebt,
 } = gameInfoSlice.actions;
 
 export default gameInfoSlice.reducer;

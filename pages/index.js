@@ -27,6 +27,10 @@ import {
   removeBusiness,
   removeFund,
   removeStock,
+  goBankcrupt,
+  setCarLoan,
+  setCreditCardDebt,
+  setRetailDebt,
 } from "@/redux/gameInfoSlice";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -61,6 +65,9 @@ export default function Home() {
   const businesses = useSelector((state) => state.gameInfo.businesses);
   const funds = useSelector((state) => state.gameInfo.funds);
   const stocks = useSelector((state) => state.gameInfo.stocks);
+  const carLoan = useSelector((state) => state.gameInfo.carLoan);
+  const retailDebt = useSelector((state) => state.gameInfo.retailDebt);
+  const creditCardDebt = useSelector((state) => state.gameInfo.creditCardDebt);
   const dispatch = useDispatch();
 
   function AddBusiness() {
@@ -85,6 +92,10 @@ export default function Home() {
 
   function RemoveFund(fundName) {
     dispatch(removeFund(fundName));
+  }
+
+  function GoBankcrupt() {
+    dispatch(goBankcrupt());
   }
 
   return (
@@ -364,11 +375,27 @@ export default function Home() {
         </div>
         <div className="flex justify-between">
           <h1>Car Loans:</h1>
-          <CustomInput type="number" noDescription={true} />
+          <CustomInput
+            type="number"
+            value={carLoan}
+            setValueFunction={setCarLoan}
+          />
         </div>
         <div className="flex justify-between">
           <h1>Credit Card Debt:</h1>
-          <CustomInput type="number" noDescription={true} />
+          <CustomInput
+            type="number"
+            value={creditCardDebt}
+            setValueFunction={setCreditCardDebt}
+          />
+        </div>
+        <div className="flex justify-between">
+          <h1>Retail Debt:</h1>
+          <CustomInput
+            type="number"
+            value={retailDebt}
+            setValueFunction={setRetailDebt}
+          />
         </div>
         <div className="flex justify-between">
           <h1>Bank Loan:</h1>
@@ -481,6 +508,12 @@ export default function Home() {
           </button>
           <button className="rounded-lg border border-black" onClick={AddFund}>
             Add Funds/CDs
+          </button>
+          <button
+            className="!mt-5 rounded-lg border border-black bg-red-500 font-bold"
+            onClick={GoBankcrupt}
+          >
+            Bankcruptcy
           </button>
         </div>
       </div>
