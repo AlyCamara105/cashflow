@@ -121,6 +121,7 @@ export const gameInfoSlice = createSlice({
       newBusiness.Mortgage = state.businessMortgage;
       newBusiness.DownPayment = state.businessDownPayment;
       newBusiness.Cashflow = state.businessCashflow;
+      newBusiness.TimeCreated = new Date();
 
       state.businesses.push(newBusiness);
       gameInfoSlice.caseReducers.setPassiveIncome(state);
@@ -154,6 +155,7 @@ export const gameInfoSlice = createSlice({
       newStock.Name = state.stocksandfundsName;
       newStock.NumberOfShares = state.stocksandfundsShares;
       newStock.ShareAmount = state.stocksandfundsShareAmount;
+      newStock.TimeCreated = new Date();
 
       state.stocks.push(newStock);
     },
@@ -162,13 +164,14 @@ export const gameInfoSlice = createSlice({
       newFund.Name = state.stocksandfundsName;
       newFund.NumberOfShares = state.stocksandfundsShares;
       newFund.ShareAmount = state.stocksandfundsShareAmount;
+      newFund.TimeCreated = new Date();
 
       state.funds.push(newFund);
       gameInfoSlice.caseReducers.setPassiveIncome(state);
     },
     removeBusiness: (state, action) => {
       state.businesses = state.businesses.filter(
-        (business) => business.Name != action.payload
+        (business) => business.TimeCreated != action.payload
       );
 
       console.log(state.businesses);
@@ -177,13 +180,13 @@ export const gameInfoSlice = createSlice({
     },
     removeStock: (state, action) => {
       state.stocks = state.stocks.filter(
-        (stock) => stock.Name != action.payload
+        (stock) => stock.TimeCreated != action.payload
       );
 
       gameInfoSlice.caseReducers.setPassiveIncome(state);
     },
     removeFund: (state, action) => {
-      state.funds = state.funds.filter((fund) => fund.Name != action.payload);
+      state.funds = state.funds.filter((fund) => fund.TimeCreated != action.payload);
 
       gameInfoSlice.caseReducers.setPassiveIncome(state);
     },

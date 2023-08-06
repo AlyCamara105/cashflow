@@ -286,7 +286,7 @@ export default function Home() {
             </div>
             <button
               className="text-lg text-red-700"
-              onClick={() => RemoveStock(stock.Name)}
+              onClick={() => RemoveStock(stock.TimeCreated)}
             >
               X
             </button>
@@ -308,7 +308,7 @@ export default function Home() {
             </div>
             <button
               className="text-lg text-red-700"
-              onClick={() => RemoveFund(fund.Name)}
+              onClick={() => RemoveFund(fund.TimeCreated)}
             >
               X
             </button>
@@ -341,7 +341,7 @@ export default function Home() {
             </div>
             <button
               className="text-lg text-red-700"
-              onClick={() => RemoveBusiness(business.Name)}
+              onClick={() => RemoveBusiness(business.TimeCreated)}
             >
               X
             </button>
